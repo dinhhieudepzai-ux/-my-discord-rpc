@@ -3,84 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Discord RPC Manager</title>
+    <title>NovaRPC Clone - Manager</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            background-color: #0f1117;
+            background-color: #0b0f19;
             color: #ffffff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #131826;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #1f293d;
+        }
+        .header h1 { font-size: 18px; margin: 0; color: #818cf8; }
         .card {
-            background-color: #1a1c23;
-            padding: 30px;
+            background-color: #131826;
+            padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            width: 400px;
+            border: 1px solid #1f293d;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
-        h2 { text-align: center; margin-bottom: 20px; color: #5865F2; }
-        label { display: block; margin-top: 10px; font-size: 14px; color: #b9bbbe; }
+        label { display: block; margin-top: 15px; font-size: 13px; color: #9ca3af; font-weight: 500; }
         input {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            background-color: #2f3136;
-            border: 1px solid #202225;
-            border-radius: 6px;
+            padding: 12px;
+            margin-top: 6px;
+            background-color: #0b0f19;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
             color: white;
-            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus { border-color: #6366f1; outline: none; }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
         }
         button {
-            width: 100%;
+            flex: 1;
             padding: 12px;
-            margin-top: 20px;
-            background-color: #5865F2;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
-        button:hover { background-color: #4752c4; }
-        #status { text-align: center; margin-top: 15px; font-size: 14px; }
+        button:hover { opacity: 0.9; }
+        .btn-start { background-color: #10b981; }
+        .btn-stop { background-color: #ef4444; }
+        .status-box {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            background: #0b0f19;
+            border: 1px solid #1f293d;
+        }
+        .rpc-preview {
+            display: flex;
+            align-items: center;
+            background: #1e222f;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            gap: 12px;
+        }
+        .rpc-icon {
+            width: 45px;
+            height: 45px;
+            background: #4f46e5;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .rpc-info div { font-size: 13px; color: #d1d5db; }
+        .rpc-info .title { font-weight: bold; color: white; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>Discord RPC Manager</h2>
-        
-        <label>Discord User Token:</label>
-        <input type="password" id="token" placeholder="Dán token của bạn vào đây">
+    <div class="container">
+        <div class="header">
+            <h1>🎮 NovaRPC Manager (Clone)</h1>
+            <span style="font-size: 12px; color: #10b981;">● Online</span>
+        </div>
 
-        <label>Tên trạng thái (Details):</label>
-        <input type="text" id="details" value="discord.gg/808">
+        <div class="card">
+            <h3 style="margin-top: 0; color: #fff;">Cấu hình Rich Presence</h3>
+            
+            <label>Discord User Token:</label>
+            <input type="password" id="token" placeholder="Dán token Discord của bạn vào đây">
 
-        <label>Trạng thái phụ (State):</label>
-        <input type="text" id="state" value="SONY SONY SONY">
+            <label>Tên ứng dụng / Tiêu đề chính (Name):</label>
+            <input type="text" id="appName" value="Sony Software">
 
-        <button onclick="startRPC()">Bắt đầu chạy RPC</button>
-        <div id="status"></div>
+            <label>Dòng chi tiết (Details):</label>
+            <input type="text" id="details" value="discord.gg/808">
+
+            <label>Trạng thái phụ (State):</label>
+            <input type="text" id="state" value="SONY SONY SONY">
+
+            <div class="rpc-preview">
+                <div class="rpc-icon">🎵</div>
+                <div class="rpc-info">
+                    <div style="font-size: 11px; color: #9ca3af;">ĐANG NGHE</div>
+                    <div class="title" id="prevName">Sony Software</div>
+                    <div id="prevDetails">discord.gg/808</div>
+                    <div id="prevStates" style="font-size: 12px; color: #9ca3af;">SONY SONY SONY</div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-start" onclick="startRPC()">Bắt đầu Chạy</button>
+                <button class="btn-stop" onclick="stopRPC()">Dừng Lại</button>
+            </div>
+
+            <div id="status" class="status-box" style="color: #9ca3af;">Trạng thái: Chưa kết nối</div>
+        </div>
     </div>
 
     <script>
         let ws = null;
         let heartbeatInterval = null;
 
+        // Cập nhật giao diện xem trước khi gõ phím
+        document.getElementById('appName').addEventListener('input', (e) => document.getElementById('prevName').innerText = e.target.value);
+        document.getElementById('details').addEventListener('input', (e) => document.getElementById('prevDetails').innerText = e.target.value);
+        document.getElementById('state').addEventListener('input', (e) => document.getElementById('prevStates').innerText = e.target.value);
+
         function startRPC() {
-            const token = document.getElementById('token').value;
+            const token = document.getElementById('token').value.trim();
+            const appName = document.getElementById('appName').value;
             const details = document.getElementById('details').value;
             const state = document.getElementById('state').value;
-            const statusDiv = document.getElementById('status');
+            const statusBox = document.getElementById('status');
 
             if (!token) {
-                statusDiv.style.color = '#ed4245';
-                statusDiv.innerText = 'Vui lòng nhập Discord Token!';
+                statusBox.style.color = '#ef4444';
+                statusBox.innerText = 'Lỗi: Vui lòng nhập Discord Token!';
                 return;
             }
 
@@ -89,8 +173,8 @@
                 clearInterval(heartbeatInterval);
             }
 
-            statusDiv.style.color = '#fEE75C';
-            statusDiv.innerText = 'Đang kết nối tới Discord...';
+            statusBox.style.color = '#f59e0b';
+            statusBox.innerText = 'Đang kết nối tới cổng WebSocket Discord...';
 
             ws = new WebSocket('wss://gateway.discord.gg/?v=9&encoding=json');
 
@@ -101,7 +185,7 @@
                 if (op === 10) {
                     const interval = d.heartbeat_interval;
                     
-                    // Gửi mã xác thực đăng nhập token
+                    // Gửi token xác thực tài khoản
                     ws.send(JSON.stringify({
                         op: 2,
                         d: {
@@ -110,20 +194,20 @@
                         }
                     }));
 
-                    // Giữ nhịp kết nối
+                    // Giữ kết nối (Heartbeat)
                     heartbeatInterval = setInterval(() => {
                         ws.send(JSON.stringify({ op: 1, d: null }));
                     }, interval);
 
-                    // Gửi thông tin trạng thái RPC lên tài khoản
+                    // Gửi gói tin cập nhật trạng thái hoạt động (Activity)
                     setTimeout(() => {
                         ws.send(JSON.stringify({
                             op: 3,
                             d: {
                                 since: Date.now(),
                                 activities: [{
-                                    name: "Sony Software",
-                                    type: 2, // 2: Listening
+                                    name: appName,
+                                    type: 2, // 2 tương ứng với Listening (Đang nghe nhạc)
                                     details: details,
                                     state: state,
                                     timestamps: { start: Math.floor(Date.now() / 1000) }
@@ -132,18 +216,27 @@
                                 afk: false
                             }
                         }));
-                        statusDiv.style.color = '#57f287';
-                        statusDiv.innerText = 'Thành công! Trạng thái đã lên Discord.';
-                    }, 2000);
+                        statusBox.style.color = '#10b981';
+                        statusBox.innerText = ' thành công! Trạng thái đã hiện lên Discord.';
+                    }, 1500);
                 }
             };
 
             ws.onerror = function() {
-                statusDiv.style.color = '#ed4245';
-                statusDiv.innerText = 'Lỗi kết nối WebSocket!';
+                statusBox.style.color = '#ef4444';
+                statusBox.innerText = 'Lỗi kết nối WebSocket hoặc Token không hợp lệ!';
             };
         }
-    </script>
 
+        function stopRPC() {
+            if (ws) {
+                ws.close();
+                clearInterval(heartbeatInterval);
+                ws = null;
+                document.getElementById('status').style.color = '#ef4444';
+                document.getElementById('status').innerText = 'Đã dừng RPC.';
+            }
+        }
+    </script>
 </body>
 </html>
