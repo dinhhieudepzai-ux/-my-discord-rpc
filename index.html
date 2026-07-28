@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>808 - DiscordRPC</title>
+    <title>NovaRPC Manager Clone</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -15,10 +15,7 @@
             display: flex;
             justify-content: center;
         }
-        .container {
-            width: 100%;
-            max-width: 650px;
-        }
+        .container { width: 100%; max-width: 650px; }
         .card {
             background-color: #131826;
             padding: 25px;
@@ -50,11 +47,7 @@
             color: #d1d5db;
         }
         .checkbox-group input { width: auto; margin: 0; }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
+        .btn-group { display: flex; gap: 10px; margin-top: 25px; }
         button {
             flex: 1;
             padding: 12px;
@@ -89,14 +82,14 @@
             <input type="password" id="token" placeholder="Dán token Discord của bạn vào đây">
 
             <label>Tên RPC (Name) *</label>
-            <input type="text" id="appName" value="Lê Bảo">
+            <input type="text" id="appName" value="Raceit">
 
             <label>Loại hoạt động</label>
             <select id="activityType">
                 <option value="0">Playing (Đang chơi)</option>
                 <option value="1">Streaming (Đang phát trực tiếp)</option>
-                <option value="2">Listening (Đang nghe)</option>
-                <option value="3" selected>Watching (Đang xem)</option>
+                <option value="2" selected>Listening (Đang nghe)</option>
+                <option value="3">Watching (Đang xem)</option>
                 <option value="5">Competing (Đang thi đấu)</option>
             </select>
 
@@ -104,10 +97,10 @@
             <input type="text" id="appId" value="137950502278514708">
 
             <label>Details (Dòng 1)</label>
-            <input type="text" id="details" value="Đang Sục">
+            <input type="text" id="details" value="Team Navy Tadaski">
 
             <label>State (Dòng 2)</label>
-            <input type="text" id="state" placeholder="VD: Survival Mode">
+            <input type="text" id="state" value="Bloxstrike">
 
             <div class="row">
                 <div>
@@ -232,6 +225,7 @@
                         application_id: appId || undefined
                     };
 
+                    // Sửa chuẩn tính theo giây (Math.floor(Date.now() / 1000)) để tránh lỗi thời gian vô tận
                     if (showTimestamp) {
                         activityPayload.timestamps = { start: Math.floor(Date.now() / 1000) };
                     }
@@ -270,7 +264,7 @@
                             }
                         }));
                         statusBox.style.color = '#10b981';
-                        statusBox.innerText = 'Cập nhật thành công! Trạng thái đã hiện lên Discord kèm ảnh SONY.';
+                        statusBox.innerText = 'Cập nhật thành công! Thời gian đã đếm chuẩn từ đầu.';
                     }, 1500);
                 }
             };
