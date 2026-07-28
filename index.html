@@ -59,16 +59,19 @@
         <input type="password" id="token" placeholder="Dán token của bạn vào đây">
 
         <label>Tên trạng thái (Details):</label>
-        <input type="text" id="details" placeholder="Ví dụ: discord.gg/808" value="discord.gg/808">
+        <input type="text" id="details" value="discord.gg/808">
 
         <label>Trạng thái phụ (State):</label>
-        <input type="text" id="state" placeholder="Ví dụ: SONY SONY SONY" value="SONY SONY SONY">
+        <input type="text" id="state" value="SONY SONY SONY">
 
         <button onclick="startRPC()">Bắt đầu chạy RPC</button>
         <div id="status"></div>
     </div>
 
     <script>
+        let ws = null;
+        let heartbeatInterval = null;
+
         function startRPC() {
             const token = document.getElementById('token').value;
             const details = document.getElementById('details').value;
@@ -81,11 +84,64 @@
                 return;
             }
 
-            statusDiv.style.color = '#57f287';
-            statusDiv.innerText = 'Đã lưu cấu hình! (Lưu ý: Để chạy WebSocket thực tế cần kết nối Backend Node.js)';
-            
-            // Đoạn này dùng để kết nối Gateway WebSocket của Discord (Cần chạy qua Server Node.js để tránh lỗi CORS)
-            console.log({ token, details, state });
+            if (ws) {
+                ws.close();
+                clearInterval(heartbeatInterval);
+            }
+
+            statusDiv.style.color = '#fEE75C';
+            statusDiv.innerText = 'Đang kết nối tới Discord...';
+
+            ws = new WebSocket('wss://gateway.discord.gg/?v=9&encoding=json');
+
+            ws.onmessage = function(event) {
+                const message = JSON.parse(event.data);
+                const { op, d } = message;
+
+                if (op === 10) {
+                    const interval = d.heartbeat_interval;
+                    
+                    // Gửi mã xác thực đăng nhập token
+                    ws.send(JSON.stringify({
+                        op: 2,
+                        d: {
+                            token: token,
+                            properties: { os: "Windows", browser: "Chrome", device: "" }
+                        }
+                    }));
+
+                    // Giữ nhịp kết nối
+                    heartbeatInterval = setInterval(() => {
+                        ws.send(JSON.stringify({ op: 1, d: null }));
+                    }, interval);
+
+                    // Gửi thông tin trạng thái RPC lên tài khoản
+                    setTimeout(() => {
+                        ws.send(JSON.stringify({
+                            op: 3,
+                            d: {
+                                since: Date.now(),
+                                activities: [{
+                                    name: "Sony Software",
+                                    type: 2, // 2: Listening
+                                    details: details,
+                                    state: state,
+                                    timestamps: { start: Math.floor(Date.now() / 1000) }
+                                }],
+                                status: "online",
+                                afk: false
+                            }
+                        }));
+                        statusDiv.style.color = '#57f287';
+                        statusDiv.innerText = 'Thành công! Trạng thái đã lên Discord.';
+                    }, 2000);
+                }
+            };
+
+            ws.onerror = function() {
+                statusDiv.style.color = '#ed4245';
+                statusDiv.innerText = 'Lỗi kết nối WebSocket!';
+            };
         }
     </script>
 
