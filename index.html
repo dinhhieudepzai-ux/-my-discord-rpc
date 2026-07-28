@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DiscordRPC - 808</title>
+    <title>NovaRPC Manager Clone</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -95,8 +95,8 @@
             <select id="activityType">
                 <option value="0">Playing (Đang chơi)</option>
                 <option value="1">Streaming (Đang phát trực tiếp)</option>
-                <option value="2" selected>Listening (Đang nghe)</option>
-                <option value="3">Watching (Đang xem)</option>
+                <option value="2">Listening (Đang nghe)</option>
+                <option value="3" selected>Watching (Đang xem)</option>
                 <option value="5">Competing (Đang thi đấu)</option>
             </select>
 
@@ -112,11 +112,11 @@
             <div class="row">
                 <div>
                     <label>Large Image URL</label>
-                    <input type="text" id="largeImage" placeholder="URL hình ảnh lớn">
+                    <input type="text" id="largeImage" value="https://i.imgur.com/1Z99g4J.jpg" placeholder="URL hình ảnh lớn">
                 </div>
                 <div>
                     <label>Large Text</label>
-                    <input type="text" id="largeText" placeholder="nv">
+                    <input type="text" id="largeText" value="SONY">
                 </div>
             </div>
 
@@ -270,7 +270,7 @@
                             }
                         }));
                         statusBox.style.color = '#10b981';
-                        statusBox.innerText = 'Cập nhật thành công! Trạng thái đã hiện lên Discord.';
+                        statusBox.innerText = 'Cập nhật thành công! Trạng thái đã hiện lên Discord kèm ảnh SONY.';
                     }, 1500);
                 }
             };
@@ -284,7 +284,6 @@
         function stopRPC() {
             const statusBox = document.getElementById('status');
             if (ws && ws.readyState === WebSocket.OPEN) {
-                // Xóa trạng thái ngay lập tức trên Discord
                 ws.send(JSON.stringify({
                     op: 3,
                     d: {
