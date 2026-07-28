@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Discord RPC Manager</title>
+    <style>
+        body {
+            background-color: #0f1117;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background-color: #1a1c23;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 400px;
+        }
+        h2 { text-align: center; margin-bottom: 20px; color: #5865F2; }
+        label { display: block; margin-top: 10px; font-size: 14px; color: #b9bbbe; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #2f3136;
+            border: 1px solid #202225;
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #5865F2;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background-color: #4752c4; }
+        #status { text-align: center; margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
 
+    <div class="card">
+        <h2>Discord RPC Manager</h2>
+        
+        <label>Discord User Token:</label>
+        <input type="password" id="token" placeholder="Dán token của bạn vào đây">
+
+        <label>Tên trạng thái (Details):</label>
+        <input type="text" id="details" placeholder="Ví dụ: discord.gg/808" value="discord.gg/808">
+
+        <label>Trạng thái phụ (State):</label>
+        <input type="text" id="state" placeholder="Ví dụ: SONY SONY SONY" value="SONY SONY SONY">
+
+        <button onclick="startRPC()">Bắt đầu chạy RPC</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function startRPC() {
+            const token = document.getElementById('token').value;
+            const details = document.getElementById('details').value;
+            const state = document.getElementById('state').value;
+            const statusDiv = document.getElementById('status');
+
+            if (!token) {
+                statusDiv.style.color = '#ed4245';
+                statusDiv.innerText = 'Vui lòng nhập Discord Token!';
+                return;
+            }
+
+            statusDiv.style.color = '#57f287';
+            statusDiv.innerText = 'Đã lưu cấu hình! (Lưu ý: Để chạy WebSocket thực tế cần kết nối Backend Node.js)';
+            
+            // Đoạn này dùng để kết nối Gateway WebSocket của Discord (Cần chạy qua Server Node.js để tránh lỗi CORS)
+            console.log({ token, details, state });
+        }
+    </script>
+
+</body>
+</html>
