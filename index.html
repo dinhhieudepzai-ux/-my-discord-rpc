@@ -76,7 +76,7 @@
 
     <div class="container">
         <div class="card">
-            <h2>RPC Edit Menu</h2>
+            <h2>✏️ Chỉnh sửa RPC</h2>
             
             <label>Discord User Token *</label>
             <input type="password" id="token" placeholder="Dán token Discord của bạn vào đây">
@@ -88,9 +88,9 @@
             <select id="activityType">
                 <option value="0">Playing (Đang chơi)</option>
                 <option value="1">Streaming (Đang phát trực tiếp)</option>
-                <option value="2" selected>Listening (Đang nghe)</option>
+                <option value="2">Listening (Đang nghe)</option>
                 <option value="3">Watching (Đang xem)</option>
-                <option value="5">Competing (Đang thi đấu)</option>
+                <option value="5" selected>Competing (Đang thi đấu)</option>
             </select>
 
             <label>Application ID</label>
@@ -100,16 +100,17 @@
             <input type="text" id="details" value="Team Navy Tadaski">
 
             <label>State (Dòng 2)</label>
-            <input type="text" id="state" value="Bloxstrike">
+            <input type="text" id="state" value="Đang Bắn Giải Trong Bloxstrike">
 
             <div class="row">
                 <div>
                     <label>Large Image URL</label>
-                    <input type="text" id="largeImage" value="https://i.imgur.com/1Z99g4J.jpg" placeholder="URL hình ảnh lớn">
+                    <!-- Sử dụng link ảnh trực tiếp dạng công khai -->
+                    <input type="text" id="largeImage" value="https://i.imgur.com/w1oU9Qn.png" placeholder="URL hình ảnh lớn">
                 </div>
                 <div>
                     <label>Large Text</label>
-                    <input type="text" id="largeText" value="SONY">
+                    <input type="text" id="largeText" value="Raceit Logo">
                 </div>
             </div>
 
@@ -225,7 +226,6 @@
                         application_id: appId || undefined
                     };
 
-                    // Sửa chuẩn tính theo giây (Math.floor(Date.now() / 1000)) để tránh lỗi thời gian vô tận
                     if (showTimestamp) {
                         activityPayload.timestamps = { start: Math.floor(Date.now() / 1000) };
                     }
@@ -264,7 +264,7 @@
                             }
                         }));
                         statusBox.style.color = '#10b981';
-                        statusBox.innerText = 'Cập nhật thành công! Thời gian đã đếm chuẩn từ đầu.';
+                        statusBox.innerText = 'Cập nhật thành công! Ảnh và trạng thái đã hiện lên chuẩn xác.';
                     }, 1500);
                 }
             };
