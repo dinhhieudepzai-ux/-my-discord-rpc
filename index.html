@@ -212,7 +212,6 @@
                 if (op === 10) {
                     const interval = d.heartbeat_interval;
                     
-                    // Gửi token xác thực tài khoản
                     ws.send(JSON.stringify({
                         op: 2,
                         d: {
@@ -221,12 +220,10 @@
                         }
                     }));
 
-                    // Giữ kết nối (Heartbeat)
                     heartbeatInterval = setInterval(() => {
                         ws.send(JSON.stringify({ op: 1, d: null }));
                     }, interval);
 
-                    // Xây dựng cấu trúc Activity gửi lên Discord
                     let activityPayload = {
                         name: appName,
                         type: activityType,
@@ -239,7 +236,6 @@
                         activityPayload.timestamps = { start: Math.floor(Date.now() / 1000) };
                     }
 
-                    // Thêm hình ảnh nếu có
                     if (largeImage || smallImage) {
                         activityPayload.assets = {};
                         if (largeImage) {
@@ -252,7 +248,6 @@
                         }
                     }
 
-                    // Thêm nút bấm (Buttons) nếu có
                     let buttons = [];
                     if (btn1Label && btn1Url) buttons.push(btn1Label);
                     if (btn2Label && btn2Url) buttons.push(btn2Label);
@@ -287,12 +282,29 @@
         }
 
         function stopRPC() {
-            if (ws) {
-                ws.close();
-                clearInterval(heartbeatInterval);
-                ws = null;
-                document.getElementById('status').style.color = '#ef4444';
-                document.getElementById('status').innerText = 'Đã dừng RPC.';
+            const statusBox = document.getElementById('status');
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                // Xóa trạng thái ngay lập tức trên Discord
+                ws.send(JSON.stringify({
+                    op: 3,
+                    d: {
+                        since: Date.now(),
+                        activities: [],
+                        status: "online",
+                        afk: false
+                    }
+                }));
+
+                setTimeout(() => {
+                    ws.close();
+                    clearInterval(heartbeatInterval);
+                    ws = null;
+                    statusBox.style.color = '#ef4444';
+                    statusBox.innerText = 'Đã dừng và xóa trạng thái trên Discord.';
+                }, 300);
+            } else {
+                statusBox.style.color = '#ef4444';
+                statusBox.innerText = 'RPC đang không chạy hoặc chưa kết nối.';
             }
         }
     </script>
