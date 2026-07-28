@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaRPC Clone - Manager</title>
+    <title>NovaRPC Manager Clone</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -13,45 +13,43 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
         }
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            background: #131826;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border: 1px solid #1f293d;
-        }
-        .header h1 { font-size: 18px; margin: 0; color: #818cf8; }
         .card {
             background-color: #131826;
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #1f293d;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
         }
-        label { display: block; margin-top: 15px; font-size: 13px; color: #9ca3af; font-weight: 500; }
-        input {
+        h2 { margin-top: 0; color: #f3f4f6; font-size: 20px; }
+        label { display: block; margin-top: 12px; font-size: 12px; color: #9ca3af; font-weight: bold; text-transform: uppercase; }
+        input, select {
             width: 100%;
-            padding: 12px;
-            margin-top: 6px;
+            padding: 10px;
+            margin-top: 5px;
             background-color: #0b0f19;
             border: 1px solid #2d3748;
             border-radius: 8px;
             color: white;
             font-size: 14px;
         }
-        input:focus { border-color: #6366f1; outline: none; }
+        input:focus, select:focus { border-color: #6366f1; outline: none; }
+        .row { display: flex; gap: 10px; }
+        .row > div { flex: 1; }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #d1d5db;
+        }
+        .checkbox-group input { width: auto; margin: 0; }
         .btn-group {
             display: flex;
             gap: 10px;
@@ -66,12 +64,11 @@
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
-        button:hover { opacity: 0.9; }
-        .btn-start { background-color: #10b981; }
+        .btn-update { background-color: #4f46e5; }
         .btn-stop { background-color: #ef4444; }
-        .status-box {
+        button:hover { opacity: 0.9; }
+        #status {
             margin-top: 15px;
             padding: 10px;
             border-radius: 6px;
@@ -80,69 +77,93 @@
             background: #0b0f19;
             border: 1px solid #1f293d;
         }
-        .rpc-preview {
-            display: flex;
-            align-items: center;
-            background: #1e222f;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
-            gap: 12px;
-        }
-        .rpc-icon {
-            width: 45px;
-            height: 45px;
-            background: #4f46e5;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .rpc-info div { font-size: 13px; color: #d1d5db; }
-        .rpc-info .title { font-weight: bold; color: white; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>🎮 NovaRPC Manager (Clone)</h1>
-            <span style="font-size: 12px; color: #10b981;">● Online</span>
-        </div>
-
         <div class="card">
-            <h3 style="margin-top: 0; color: #fff;">Cấu hình Rich Presence</h3>
+            <h2>✏️ Chỉnh sửa RPC</h2>
             
-            <label>Discord User Token:</label>
+            <label>Discord User Token *</label>
             <input type="password" id="token" placeholder="Dán token Discord của bạn vào đây">
 
-            <label>Tên ứng dụng / Tiêu đề chính (Name):</label>
-            <input type="text" id="appName" value="Sony Software">
+            <label>Tên RPC (Name) *</label>
+            <input type="text" id="appName" value="Lê Bảo">
 
-            <label>Dòng chi tiết (Details):</label>
-            <input type="text" id="details" value="discord.gg/808">
+            <label>Loại hoạt động</label>
+            <select id="activityType">
+                <option value="0">Playing (Đang chơi)</option>
+                <option value="1">Streaming (Đang phát trực tiếp)</option>
+                <option value="2" selected>Listening (Đang nghe)</option>
+                <option value="3">Watching (Đang xem)</option>
+                <option value="5">Competing (Đang thi đấu)</option>
+            </select>
 
-            <label>Trạng thái phụ (State):</label>
-            <input type="text" id="state" value="SONY SONY SONY">
+            <label>Application ID</label>
+            <input type="text" id="appId" value="137950502278514708">
 
-            <div class="rpc-preview">
-                <div class="rpc-icon">🎵</div>
-                <div class="rpc-info">
-                    <div style="font-size: 11px; color: #9ca3af;">ĐANG NGHE</div>
-                    <div class="title" id="prevName">Sony Software</div>
-                    <div id="prevDetails">discord.gg/808</div>
-                    <div id="prevStates" style="font-size: 12px; color: #9ca3af;">SONY SONY SONY</div>
+            <label>Details (Dòng 1)</label>
+            <input type="text" id="details" value="Đang Sục">
+
+            <label>State (Dòng 2)</label>
+            <input type="text" id="state" placeholder="VD: Survival Mode">
+
+            <div class="row">
+                <div>
+                    <label>Large Image URL</label>
+                    <input type="text" id="largeImage" placeholder="URL hình ảnh lớn">
+                </div>
+                <div>
+                    <label>Large Text</label>
+                    <input type="text" id="largeText" placeholder="nv">
                 </div>
             </div>
 
-            <div class="btn-group">
-                <button class="btn-start" onclick="startRPC()">Bắt đầu Chạy</button>
-                <button class="btn-stop" onclick="stopRPC()">Dừng Lại</button>
+            <div class="row">
+                <div>
+                    <label>Small Image URL</label>
+                    <input type="text" id="smallImage" placeholder="URL hình ảnh nhỏ">
+                </div>
+                <div>
+                    <label>Small Text</label>
+                    <input type="text" id="smallText" placeholder="nova">
+                </div>
             </div>
 
-            <div id="status" class="status-box" style="color: #9ca3af;">Trạng thái: Chưa kết nối</div>
+            <div class="row">
+                <div>
+                    <label>Button 1 Label</label>
+                    <input type="text" id="btn1Label" value="zyo">
+                </div>
+                <div>
+                    <label>Button 1 URL</label>
+                    <input type="text" id="btn1Url" value="https://zyo.lol">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Button 2 Label</label>
+                    <input type="text" id="btn2Label" value="Discord">
+                </div>
+                <div>
+                    <label>Button 2 URL</label>
+                    <input type="text" id="btn2Url" value="https://discord.gg">
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="showTimestamp" checked>
+                <label for="showTimestamp" style="display:inline; margin:0; cursor:pointer;">Hiển thị thời gian elapsed</label>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-update" onclick="startRPC()">💾 Cập nhật</button>
+                <button class="btn-stop" onclick="stopRPC()">⏹ Dừng lại</button>
+            </div>
+
+            <div id="status" style="color: #9ca3af;" class="status-box">Trạng thái: Chưa kết nối</div>
         </div>
     </div>
 
@@ -150,16 +171,22 @@
         let ws = null;
         let heartbeatInterval = null;
 
-        // Cập nhật giao diện xem trước khi gõ phím
-        document.getElementById('appName').addEventListener('input', (e) => document.getElementById('prevName').innerText = e.target.value);
-        document.getElementById('details').addEventListener('input', (e) => document.getElementById('prevDetails').innerText = e.target.value);
-        document.getElementById('state').addEventListener('input', (e) => document.getElementById('prevStates').innerText = e.target.value);
-
         function startRPC() {
             const token = document.getElementById('token').value.trim();
             const appName = document.getElementById('appName').value;
+            const activityType = parseInt(document.getElementById('activityType').value);
+            const appId = document.getElementById('appId').value;
             const details = document.getElementById('details').value;
             const state = document.getElementById('state').value;
+            const largeImage = document.getElementById('largeImage').value;
+            const largeText = document.getElementById('largeText').value;
+            const smallImage = document.getElementById('smallImage').value;
+            const smallText = document.getElementById('smallText').value;
+            const btn1Label = document.getElementById('btn1Label').value;
+            const btn1Url = document.getElementById('btn1Url').value;
+            const btn2Label = document.getElementById('btn2Label').value;
+            const btn2Url = document.getElementById('btn2Url').value;
+            const showTimestamp = document.getElementById('showTimestamp').checked;
             const statusBox = document.getElementById('status');
 
             if (!token) {
@@ -199,25 +226,56 @@
                         ws.send(JSON.stringify({ op: 1, d: null }));
                     }, interval);
 
-                    // Gửi gói tin cập nhật trạng thái hoạt động (Activity)
+                    // Xây dựng cấu trúc Activity gửi lên Discord
+                    let activityPayload = {
+                        name: appName,
+                        type: activityType,
+                        details: details || undefined,
+                        state: state || undefined,
+                        application_id: appId || undefined
+                    };
+
+                    if (showTimestamp) {
+                        activityPayload.timestamps = { start: Math.floor(Date.now() / 1000) };
+                    }
+
+                    // Thêm hình ảnh nếu có
+                    if (largeImage || smallImage) {
+                        activityPayload.assets = {};
+                        if (largeImage) {
+                            activityPayload.assets.large_image = largeImage;
+                            if (largeText) activityPayload.assets.large_text = largeText;
+                        }
+                        if (smallImage) {
+                            activityPayload.assets.small_image = smallImage;
+                            if (smallText) activityPayload.assets.small_text = smallText;
+                        }
+                    }
+
+                    // Thêm nút bấm (Buttons) nếu có
+                    let buttons = [];
+                    if (btn1Label && btn1Url) buttons.push(btn1Label);
+                    if (btn2Label && btn2Url) buttons.push(btn2Label);
+                    
+                    if (buttons.length > 0) {
+                        activityPayload.buttons = buttons;
+                        activityPayload.metadata = {
+                            button_urls: [btn1Url, btn2Url].filter((_, i) => buttons[i])
+                        };
+                    }
+
                     setTimeout(() => {
                         ws.send(JSON.stringify({
                             op: 3,
                             d: {
                                 since: Date.now(),
-                                activities: [{
-                                    name: appName,
-                                    type: 2, // 2 tương ứng với Listening (Đang nghe nhạc)
-                                    details: details,
-                                    state: state,
-                                    timestamps: { start: Math.floor(Date.now() / 1000) }
-                                }],
+                                activities: [activityPayload],
                                 status: "online",
                                 afk: false
                             }
                         }));
                         statusBox.style.color = '#10b981';
-                        statusBox.innerText = ' thành công! Trạng thái đã hiện lên Discord.';
+                        statusBox.innerText = 'Cập nhật thành công! Trạng thái đã hiện lên Discord.';
                     }, 1500);
                 }
             };
